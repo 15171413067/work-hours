@@ -8,7 +8,15 @@ public class Main {
 
     public static void main(String[] args) {
 	// write your code here
-        WorkLogFactory workLogFactory = new WorkLogFactory("C:\\Users\\dupengfei\\Desktop\\加班工时记录.txt");
+        String defaultFilePath = "加班工时记录.txt";
+        String filePath;
+        if(args == null || args.length == 0){
+            filePath = defaultFilePath;
+        }else{
+            filePath = args[0];
+        }
+
+        WorkLogFactory workLogFactory = new WorkLogFactory(filePath);
         try{
             workLogFactory.build();
         }catch(Exception ex){
@@ -96,6 +104,8 @@ class WorkLog{
     private String project;
     private String task;
     private String workHours;
+    private String startTime;
+    private String endTime;
 
     public String getName() {
         return name;
@@ -153,9 +163,25 @@ class WorkLog{
         this.workHours = workHours;
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
     public String output(){
         String separator = ",";
-        return name+separator+date+separator+project+separator+task+separator+workHours;
+        return name+separator+date+separator+project+separator+task+separator+workHours+separator+startTime+separator+endTime;
     }
 }
 
@@ -181,6 +207,8 @@ class WorkLogBuilder{
                 workLog.setProject(fields[1]);
                 workLog.setTask(fields[2]);
                 workLog.setWorkHours(fields[3].toUpperCase().replace("H",""));
+                workLog.setStartTime(fields[4].split("-")[0]);
+                workLog.setEndTime(fields[4].split("-")[1]);
                 workLogs.add(workLog);
             }
             return workLogs;
